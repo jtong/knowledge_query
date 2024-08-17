@@ -1,0 +1,23 @@
+{
+    "dslQuery": {
+      "action": "GET",
+      "target": "knowledge_item",
+      "conditions": [
+        {
+          "field": "type",
+          "operator": "=",
+          "value": "course"
+        },
+        {
+          "field": "content",
+          "operator": "CONTAINS",
+          "value": "数学"
+        }
+      ],
+      "limit": 2,
+      "order_by": {
+        "field": "content",
+        "direction": "ASC"
+      }
+    }
+  }

@@ -1,0 +1,12 @@
+desc: "Test queryKnowledgeSpace function - Basic filtering and limit"
+given:
+  dsl_file: "dsl.json"
+  repo_file: "repo.json"
+then:
+  ruleMatch:
+    - type: "lengthGreaterThan"
+      target: ""
+      value: 0
+    - type: "lengthNotGreaterThan"
+      target: ""
+      value: 2
