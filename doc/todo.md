@@ -1,0 +1,3 @@
+- [ ] 支持用prompt-context-builder，创建项目context作为knowledge item
+- [ ] 支持读取项目context
+- [ ] 支持读取多个knowledge item，分别作为不同的key存入一个变量
