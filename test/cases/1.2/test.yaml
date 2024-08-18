@@ -1,0 +1,32 @@
+desc: "Test batch GET operations with different aliases"
+given:
+  dsl_file: "dsl.json"
+  repo_file: "repo.json"
+then:
+  ruleMatch:
+    - type: "hasKey"
+      value: "math_courses"
+    - type: "hasKey"
+      value: "easy_courses"
+    - type: "isArray"
+      target: "math_courses"
+    - type: "isArray"
+      target: "easy_courses"
+    - type: "lengthEquals"
+      target: "math_courses"
+      value: 2
+    - type: "lengthEquals"
+      target: "easy_courses"
+      value: 2
+    - type: "stringEqualsIgnoreCase"
+      target: "math_courses.0.content"
+      value: "数学基础"
+    - type: "stringEqualsIgnoreCase"
+      target: "math_courses.1.content"
+      value: "高等数学"
+    - type: "stringEqualsIgnoreCase"
+      target: "easy_courses.0.content"
+      value: "数学基础"
+    - type: "stringEqualsIgnoreCase"
+      target: "easy_courses.1.content"
+      value: "编程入门"

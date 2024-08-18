@@ -1,0 +1,51 @@
+{
+    "dslQuery": {
+        "batch": true,
+        "action": "GET",
+        "queries": [
+            {
+                "action": "GET",
+                "target": "knowledge_item",
+                "alias": "math_courses",
+                "conditions": [
+                    {
+                        "field": "type",
+                        "operator": "=",
+                        "value": "course"
+                    },
+                    {
+                        "field": "content",
+                        "operator": "CONTAINS",
+                        "value": "数学"
+                    }
+                ],
+                "limit": 2,
+                "order_by": {
+                    "field": "content",
+                    "direction": "ASC"
+                }
+            },
+            {
+                "target": "knowledge_item",
+                "alias": "easy_courses",
+                "conditions": [
+                    {
+                        "field": "type",
+                        "operator": "=",
+                        "value": "course"
+                    },
+                    {
+                        "field": "difficulty",
+                        "operator": "=",
+                        "value": "easy"
+                    }
+                ],
+                "limit": 2,
+                "order_by": {
+                    "field": "content",
+                    "direction": "ASC"
+                }
+            }
+        ]
+    }
+}

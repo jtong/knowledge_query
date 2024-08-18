@@ -3,6 +3,30 @@ const path = require('path');
 const generateContext = require('./generator/project_context_generator');
 
 function handleKnowledgeSpaceOperation(dsl, knowledgeSpace) {
+    if (dsl.batch) {
+        return handleBatchQuery(dsl, knowledgeSpace);
+    } else {
+        return handleSingleQuery(dsl, knowledgeSpace);
+    }
+}
+
+function handleBatchQuery(dsl, knowledgeSpace) {
+    if (dsl.action !== 'GET') {
+        throw new Error('Batch queries currently only support GET actions');
+    }
+
+    const result = {};
+    dsl.queries.forEach(query => {
+        if (query.action && query.action !== 'GET') { //如果不写，就等于是GET
+            throw new Error('Individual queries in a batch must all be GET actions');
+        }
+        const queryResult = queryKnowledgeSpace(query, knowledgeSpace);
+        result[query.alias] = queryResult[query.alias];
+    });
+    return result;
+}
+
+function handleSingleQuery(dsl, knowledgeSpace) {
     switch (dsl.action) {
         case 'GET':
             return queryKnowledgeSpace(dsl, knowledgeSpace);
