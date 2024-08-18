@@ -2,7 +2,7 @@
     "dslQuery": {
       "action": "GET",
       "target": "knowledge_item",
-      "alias": "math_courses",
+      "alias": "single_math_course",
       "conditions": [
         {
           "field": "type",
@@ -15,7 +15,7 @@
           "value": "数学"
         }
       ],
-      "limit": 2,
+      "limit": 1,
       "order_by": {
         "field": "content",
         "direction": "ASC"

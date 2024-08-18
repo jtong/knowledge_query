@@ -69,15 +69,30 @@ function validateResult(result, testCase) {
 function handleRuleMatch(result, rules) {
     // 处理ruleMatch规则
     rules.forEach(rule => {
-        const actualValue = rule.target && rule.target !== '' ? result[rule.target] : result;
-        
+        const actualValue =  rule.target && rule.target !== '' ? getNestedProperty(result, rule.target) : result;
+
         // 根据rule.type处理不同的验证逻辑
         switch (rule.type) {
+            case "hasKey":
+                expect(actualValue, `Expected object to have key '${rule.value}'`).to.have.property(rule.value);
+                break;
+            case "isArray":
+                const targetValue = rule.target ? result[rule.target] : result;
+                expect(targetValue, `Expected '${rule.target || 'result'}' to be an array`).to.be.an('array');
+                break;
+            case "lengthEquals":
+                const arrayToCheck = rule.target ? result[rule.target] : result;
+                expect(arrayToCheck.length, `Expected length to be ${rule.value}, but got ${arrayToCheck.length}`).to.equal(rule.value);
+                break;
             case "lengthNotGreaterThan":
                 expect(actualValue.length, `Expected length to be at most ${rule.value}, but got ${actualValue.length}`).to.be.at.most(rule.value);
                 break;
             case "lengthGreaterThan":
                 expect(actualValue.length, `Expected length to be greater than ${rule.value}, but got ${actualValue.length}`).to.be.greaterThan(rule.value);
+                break;
+            case "isObject":
+                const objectToCheck = rule.target ? result[rule.target] : result;
+                expect(objectToCheck, `Expected '${rule.target || 'result'}' to be an object`).to.be.an('object');
                 break;
             case "stringEqualsIgnoreCase":
                 const expectedValue = rule.value;
@@ -88,4 +103,8 @@ function handleRuleMatch(result, rules) {
                 throw new Error(`Unhandled rule type: ${rule.type}`);
         }
     });
+}
+
+function getNestedProperty(obj, path) {
+    return path.split('.').reduce((current, key) => current && current[key] !== undefined ? current[key] : undefined, obj);
 }

@@ -1,0 +1,11 @@
+{
+    "knowledge_space": {
+      "knowledge_items": [
+        { "id": 1, "type": "course", "content": "数学基础", "difficulty": "easy" },
+        { "id": 2, "type": "course", "content": "高等数学", "difficulty": "hard" },
+        { "id": 3, "type": "article", "content": "数学在日常生活中的应用", "difficulty": "medium" },
+        { "id": 4, "type": "video", "content": "趣味数学课程", "difficulty": "easy" },
+        { "id": 5, "type": "course", "content": "统计学入门", "difficulty": "medium" }
+      ]
+    }
+}

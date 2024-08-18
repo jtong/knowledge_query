@@ -4,9 +4,10 @@ given:
   repo_file: "repo.json"
 then:
   ruleMatch:
-    - type: "lengthGreaterThan"
-      target: ""
-      value: 0
-    - type: "lengthNotGreaterThan"
-      target: ""
+    - type: "hasKey"
+      value: "math_courses"
+    - type: "isArray"
+      target: "math_courses"
+    - type: "lengthEquals"
+      target: "math_courses"
       value: 2

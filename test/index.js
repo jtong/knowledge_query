@@ -27,7 +27,7 @@ const config = {
          const repoFile = given.repo_file || 'repo.json';
          const inputRepoFilePath = path.resolve(testCaseDir, repoFile);
          const knowledgeSpace = require(inputRepoFilePath);
-         
+
          // Use the handleKnowledgeSpaceOperation function with the provided inputs
          const result = handleKnowledgeSpaceOperation(inputDsl.dslQuery, knowledgeSpace);
          return result;
