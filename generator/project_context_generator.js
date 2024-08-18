@@ -4,7 +4,7 @@ const { prompt_render_with_config_object } = require('prompt-context-builder');
 
 function generateContext(config) {
     // 直接使用 __dirname 获取当前目录
-    const templatePath = path.join(__dirname, 'context_template.md');
+    const templatePath = path.join(__dirname, 'project_context_template.md');
     
     // 读取模板文件
     const templateContent = fs.readFileSync(templatePath, 'utf8');

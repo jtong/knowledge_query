@@ -1,0 +1,8 @@
+{
+    "dslQuery": {
+      "action": "CREATE",
+      "target": "knowledge_item",
+      "type": "project_context",
+      "config_path": "test/cases/2/config.json"
+    }
+}

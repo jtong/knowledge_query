@@ -1,0 +1,9 @@
+{
+    "project": {
+      "base_path": "./",
+      "ignore": {
+        "path": ["node_modules", ".git"],
+        "file": [".DS_Store"]
+      }
+    }
+}

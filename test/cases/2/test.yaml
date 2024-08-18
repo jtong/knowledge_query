@@ -1,0 +1,13 @@
+desc: "Test creating a project_context knowledge item"
+given:
+  dsl_file: "create_dsl.json"
+  repo_file: "repo.json"
+  config_file: "config.json"
+then:
+  ruleMatch:
+    - type: "lengthGreaterThan"
+      target: "content"
+      value: 0
+    - type: "stringEqualsIgnoreCase"
+      target: "type"
+      value: "project_context"
