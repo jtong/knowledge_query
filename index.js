@@ -73,4 +73,6 @@ function queryKnowledgeSpace(dsl, knowledgeSpace) {
 //   const results = queryKnowledgeSpace(dslQuery, knowledgeSpace);
 //   console.log(results);
 
+
+
 module.exports = {queryKnowledgeSpace}
