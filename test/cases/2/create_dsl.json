@@ -1,8 +1,12 @@
 {
     "dslQuery": {
-      "action": "CREATE",
-      "target": "knowledge_item",
-      "type": "project_context",
-      "config_path": "test/cases/2/config.json"
+        "action": "CREATE",
+        "target": "knowledge_item",
+        "type": "project_context",
+        "pre_processor": "prompt_context_builder",
+        "meta": {
+            "config_path": "test/cases/2/config.json"
+        } 
+      
     }
 }

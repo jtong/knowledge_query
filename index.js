@@ -101,10 +101,8 @@ function createKnowledgeItem(dsl, knowledgeSpace) {
         throw new Error('Invalid target. Only "knowledge_item" is supported for creation.');
     }
 
-    if (dsl.type == 'project_context') {
-
-
-        const configPath = dsl.config_path;
+    if (dsl.pre_processor == 'prompt_context_builder') {
+        const configPath = dsl.meta.config_path;
         if (!configPath) {
             throw new Error('Config path is required for creating project_context.');
         }
@@ -122,7 +120,7 @@ function createKnowledgeItem(dsl, knowledgeSpace) {
         // Create the new knowledge item
         const newItem = {
             id: knowledgeSpace.knowledge_space.knowledge_items.length + 1,
-            type: 'project_context',
+            type: dsl.type,
             content: context,
             created_at: new Date().toISOString()
         };
