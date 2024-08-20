@@ -1,0 +1,8 @@
+{
+    "dslQuery": {
+        "action": "CREATE",
+        "target": "knowledge_item",
+        "type": "string",
+        "value": "This is a direct string value."
+    }
+}

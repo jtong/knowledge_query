@@ -1,0 +1,12 @@
+desc: "Test creating a knowledge item with direct string value"
+given:
+  dsl_file: "create_dsl.json"
+  repo_file: "repo.json"
+then:
+  ruleMatch:
+    - type: "stringEqualsIgnoreCase"
+      target: "type"
+      value: "string"
+    - type: "stringEqualsIgnoreCase"
+      target: "content"
+      value: "This is a direct string value."

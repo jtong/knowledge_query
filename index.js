@@ -100,28 +100,42 @@ function createKnowledgeItem(dsl, knowledgeSpace) {
     if (dsl.target !== 'knowledge_item') {
         throw new Error('Invalid target. Only "knowledge_item" is supported for creation.');
     }
+    if (dsl.processor) {
+        if (dsl.processor == 'prompt_context_builder') {
+            const configPath = dsl.meta.config_path;
+            if (!configPath) {
+                throw new Error('Config path is required for creating project_context.');
+            }
 
-    if (dsl.pre_processor == 'prompt_context_builder') {
-        const configPath = dsl.meta.config_path;
-        if (!configPath) {
-            throw new Error('Config path is required for creating project_context.');
+            // Read and parse the config file
+            const configContent = fs.readFileSync(configPath, 'utf8');
+            const config = JSON.parse(configContent);
+
+            // Modify the base_path to be absolute
+            config.project.base_path = path.resolve(path.dirname(configPath), config.project.base_path);
+
+            // Generate the context
+            const context = generateContext(config);
+
+            // Create the new knowledge item
+            const newItem = {
+                id: knowledgeSpace.knowledge_space.knowledge_items.length + 1,
+                type: dsl.type,
+                content: context,
+                created_at: new Date().toISOString()
+            };
+
+            // Add the new item to the knowledge space
+            knowledgeSpace.knowledge_space.knowledge_items.push(newItem);
+
+            return newItem;
         }
-
-        // Read and parse the config file
-        const configContent = fs.readFileSync(configPath, 'utf8');
-        const config = JSON.parse(configContent);
-
-        // Modify the base_path to be absolute
-        config.project.base_path = path.resolve(path.dirname(configPath), config.project.base_path);
-
-        // Generate the context
-        const context = generateContext(config);
-
-        // Create the new knowledge item
+    } if (dsl.value !== undefined) {
+        // Handle direct value creation
         const newItem = {
             id: knowledgeSpace.knowledge_space.knowledge_items.length + 1,
-            type: dsl.type,
-            content: context,
+            type: dsl.type || 'string', // Default to 'string' if type is not specified
+            content: dsl.value,
             created_at: new Date().toISOString()
         };
 
@@ -129,9 +143,10 @@ function createKnowledgeItem(dsl, knowledgeSpace) {
         knowledgeSpace.knowledge_space.knowledge_items.push(newItem);
 
         return newItem;
-    }else{
-        throw new Error('Invalid type. Only "project_context" is supported for creation for now.');
+    } else {
+        throw new Error('Invalid creation method. Use either "processor" or provide a "value".');
     }
+
 }
 
 module.exports = { handleKnowledgeSpaceOperation };
