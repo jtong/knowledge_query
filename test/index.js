@@ -27,9 +27,14 @@ const config = {
          const repoFile = given.repo_file || 'repo.json';
          const inputRepoFilePath = path.resolve(testCaseDir, repoFile);
          const knowledgeSpace = require(inputRepoFilePath);
-
+ 
+         const operationConfig = {
+             repoFilePath: inputRepoFilePath,
+             // 可以在这里添加其他配置项
+         };
+ 
          // Use the handleKnowledgeSpaceOperation function with the provided inputs
-         const result = handleKnowledgeSpaceOperation(inputDsl.dslQuery, knowledgeSpace);
+         const result = handleKnowledgeSpaceOperation(inputDsl.dslQuery, knowledgeSpace, operationConfig);
          return result;
     },
     isDebugMode: process.env.DEBUG_MODE === 'true',

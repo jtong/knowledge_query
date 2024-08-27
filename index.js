@@ -2,15 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const generateContext = require('./generator/project_context_generator');
 
-function handleKnowledgeSpaceOperation(dsl, knowledgeSpace) {
+function handleKnowledgeSpaceOperation(dsl, knowledgeSpace, config = {}) {
     if (dsl.batch) {
-        return handleBatchQuery(dsl, knowledgeSpace);
+        return handleBatchQuery(dsl, knowledgeSpace, config);
     } else {
-        return handleSingleQuery(dsl, knowledgeSpace);
+        return handleSingleQuery(dsl, knowledgeSpace, config);
     }
 }
 
-function handleBatchQuery(dsl, knowledgeSpace) {
+function handleBatchQuery(dsl, knowledgeSpace, config) {
     if (dsl.action !== 'GET') {
         throw new Error('Batch queries currently only support GET actions');
     }
@@ -20,32 +20,32 @@ function handleBatchQuery(dsl, knowledgeSpace) {
         if (query.action && query.action !== 'GET') { //如果不写，就等于是GET
             throw new Error('Individual queries in a batch must all be GET actions');
         }
-        const queryResult = queryKnowledgeSpace(query, knowledgeSpace);
+        const queryResult = queryKnowledgeSpace(query, knowledgeSpace, config);
         result[query.alias] = queryResult[query.alias];
     });
     return result;
 }
 
-function handleSingleQuery(dsl, knowledgeSpace) {
+function handleSingleQuery(dsl, knowledgeSpace, config) {
     switch (dsl.action) {
         case 'GET':
-            return queryKnowledgeSpace(dsl, knowledgeSpace);
+            return queryKnowledgeSpace(dsl, knowledgeSpace, config);
         case 'CREATE':
-            return createKnowledgeItem(dsl, knowledgeSpace);
+            return createKnowledgeItem(dsl, knowledgeSpace, config);
         default:
             throw new Error('Invalid action. Only "GET" and "CREATE" are supported.');
     }
 }
 
-function queryKnowledgeSpace(dsl, knowledgeSpace) {
+function queryKnowledgeSpace(dsl, knowledgeSpace, config) {
     if (dsl.target !== 'knowledge_item') {
         throw new Error('Invalid target. Only "knowledge_item" is supported.');
     }
 
     let results = knowledgeSpace.knowledge_space.knowledge_items.map(item => {
-        if (item.content_path) {
-            const repoPath = knowledgeSpace.repo_path || '.';
-            const fullPath = path.resolve(repoPath, item.content_path);
+        if (item.content_path && config && config.repoFilePath) {
+            const repoDir = path.dirname(config.repoFilePath);
+            const fullPath = path.resolve(repoDir, item.content_path);
             try {
                 item.content = fs.readFileSync(fullPath, 'utf8');
             } catch (error) {
@@ -55,7 +55,7 @@ function queryKnowledgeSpace(dsl, knowledgeSpace) {
         }
         return item;
     });
-    
+
     // Apply condition filtering
     if (dsl.conditions && dsl.conditions.length > 0) {
         results = results.filter(item => {
@@ -108,7 +108,7 @@ function queryKnowledgeSpace(dsl, knowledgeSpace) {
     return results;
 }
 
-function createKnowledgeItem(dsl, knowledgeSpace) {
+function createKnowledgeItem(dsl, knowledgeSpace, config) {
     if (dsl.target !== 'knowledge_item') {
         throw new Error('Invalid target. Only "knowledge_item" is supported for creation.');
     }
