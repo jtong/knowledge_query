@@ -42,8 +42,20 @@ function queryKnowledgeSpace(dsl, knowledgeSpace) {
         throw new Error('Invalid target. Only "knowledge_item" is supported.');
     }
 
-    let results = knowledgeSpace.knowledge_space.knowledge_items;
-
+    let results = knowledgeSpace.knowledge_space.knowledge_items.map(item => {
+        if (item.content_path) {
+            const repoPath = knowledgeSpace.repo_path || '.';
+            const fullPath = path.resolve(repoPath, item.content_path);
+            try {
+                item.content = fs.readFileSync(fullPath, 'utf8');
+            } catch (error) {
+                console.error(`Error reading file ${fullPath}: ${error.message}`);
+                item.content = `Error: Unable to read content from ${item.content_path}`;
+            }
+        }
+        return item;
+    });
+    
     // Apply condition filtering
     if (dsl.conditions && dsl.conditions.length > 0) {
         results = results.filter(item => {

@@ -1,13 +1,12 @@
 {
-  "name": "knowledge_query",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@jtong/knowledge_query",
+  "version": "1.0.3",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jtong",
+  "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^4.3.7",
     "js-yaml": "^4.1.0",
@@ -16,5 +15,18 @@
   },
   "dependencies": {
     "prompt-context-builder": "^1.1.7"
-  }
+  },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtong/knowledge_query.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jtong/knowledge_query/issues"
+  },
+  "homepage": "https://github.com/jtong/knowledge_query#readme",
+  "description": ""
 }

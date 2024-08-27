@@ -1,0 +1,15 @@
+{
+    "dslQuery": {
+      "action": "GET",
+      "target": "knowledge_item",
+      "alias": "content_path_test",
+      "conditions": [
+        {
+          "field": "type",
+          "operator": "=",
+          "value": "course"
+        }
+      ],
+      "limit": 1
+    }
+}

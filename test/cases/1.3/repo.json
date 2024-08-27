@@ -1,0 +1,19 @@
+{
+    "knowledge_space": {
+      "knowledge_items": [
+        { 
+          "id": 1, 
+          "type": "course", 
+          "content_path": "sample_content.txt", 
+          "difficulty": "easy" 
+        },
+        { 
+          "id": 2, 
+          "type": "article", 
+          "content": "This is a direct content", 
+          "difficulty": "medium" 
+        }
+      ]
+    },
+    "repo_path": "test/cases/1.3"
+}
