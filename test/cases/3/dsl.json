@@ -1,0 +1,17 @@
+{
+    "dslQuery": {
+        "action": "UPDATE",
+        "target": "knowledge_item",
+        "conditions": [
+            {
+                "field": "id",
+                "operator": "=",
+                "value": 1
+            }
+        ],
+        "update": {
+            "content": "Updated math basics",
+            "difficulty": "medium"
+        }
+    }
+}

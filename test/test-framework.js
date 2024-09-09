@@ -20,13 +20,32 @@ exports.runTests = function (config) {
 
             it(testCase.desc, async function () {
                 this.timeout(10000);
-                const result = await config.testFunction(testCase.given, filePath);
+                
+                let customTestFunction, customValidator;
+                
+                // 加载自定义测试函数（如果存在）
+                if (testCase.customTestFunctionPath) {
+                    const functionPath = path.resolve(path.dirname(filePath), testCase.customTestFunctionPath);
+                    customTestFunction = require(functionPath);
+                }
+                
+                // 加载自定义验证函数（如果存在）
+                if (testCase.customValidatorPath) {
+                    const validatorPath = path.resolve(path.dirname(filePath), testCase.customValidatorPath);
+                    customValidator = require(validatorPath);
+                }
+                
+                // 执行测试函数
+                const testFunction = customTestFunction || config.testFunction;
+                const result = await testFunction(testCase.given, filePath);
 
-                // 如果提供了自定义验证函数，则使用它进行验证
-                if (config.customValidator) {
+                // 执行验证
+                if (customValidator) {
+                    customValidator(result, testCase);
+                } else if (config.customValidator) {
                     config.customValidator(result, testCase);
                 } else {
-                    // 否则使用默认验证逻辑
+                    // 使用默认的验证逻辑
                     validateResult(result, testCase);
                 }
             });

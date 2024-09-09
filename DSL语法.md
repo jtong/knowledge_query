@@ -356,3 +356,53 @@ Meta 字段用于为处理器提供所需的配置信息或参数。它是一个
 4. 生成一个描述项目结构和内容的上下文
 5. 将这个生成的上下文作为新知识项的内容
 
+## 更新知识项操作语法
+
+更新操作用于修改知识空间中已存在的知识项。
+
+### 基本更新结构
+
+```json
+{
+  "action": "UPDATE",
+  "target": "knowledge_item",
+  "conditions": [
+    {
+      "field": "string",
+      "operator": "=" | "!=" | "CONTAINS" | "STARTS_WITH",
+      "value": "any"
+    }
+  ],
+  "update": {
+    "field1": "new_value1",
+    "field2": "new_value2"
+  }
+}
+```
+
+### 字段说明
+
+- `action`: 必须为 "UPDATE"。
+- `target`: 当前仅支持 "knowledge_item"。
+- `conditions`: 一个条件数组，用于定位要更新的知识项。
+- `update`: 一个对象，包含要更新的字段和新值。
+
+### 更新示例
+
+```json
+{
+  "action": "UPDATE",
+  "target": "knowledge_item",
+  "conditions": [
+    {
+      "field": "id",
+      "operator": "=",
+      "value": 1
+    }
+  ],
+  "update": {
+    "content": "更新后的内容",
+    "difficulty": "medium"
+  }
+}
+```

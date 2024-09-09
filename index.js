@@ -26,14 +26,17 @@ function handleBatchQuery(dsl, knowledgeSpace, config) {
     return result;
 }
 
+
 function handleSingleQuery(dsl, knowledgeSpace, config) {
     switch (dsl.action) {
         case 'GET':
             return queryKnowledgeSpace(dsl, knowledgeSpace, config);
         case 'CREATE':
             return createKnowledgeItem(dsl, knowledgeSpace, config);
+        case 'UPDATE':
+            return updateKnowledgeItem(dsl, knowledgeSpace, config);
         default:
-            throw new Error('Invalid action. Only "GET" and "CREATE" are supported.');
+            throw new Error('Invalid action. Only "GET", "CREATE", and "UPDATE" are supported.');
     }
 }
 
@@ -159,6 +162,45 @@ function createKnowledgeItem(dsl, knowledgeSpace, config) {
         throw new Error('Invalid creation method. Use either "processor" or provide a "value".');
     }
 
+}
+
+
+function updateKnowledgeItem(dsl, knowledgeSpace, config) {
+    if (dsl.target !== 'knowledge_item') {
+        throw new Error('Invalid target. Only "knowledge_item" is supported for updating.');
+    }
+
+    let updatedItems = 0;
+    knowledgeSpace.knowledge_space.knowledge_items = knowledgeSpace.knowledge_space.knowledge_items.map(item => {
+        if (matchesConditions(item, dsl.conditions)) {
+            updatedItems++;
+            return { ...item, ...dsl.update };
+        }
+        return item;
+    });
+
+    if (updatedItems === 0) {
+        throw new Error('No items matched the update conditions.');
+    }
+
+    return { updatedItems, message: `${updatedItems} item(s) updated successfully.` };
+}
+
+function matchesConditions(item, conditions) {
+    return conditions.every(condition => {
+        switch (condition.operator) {
+            case '=':
+                return item[condition.field] === condition.value;
+            case '!=':
+                return item[condition.field] !== condition.value;
+            case 'CONTAINS':
+                return item[condition.field].includes(condition.value);
+            case 'STARTS_WITH':
+                return item[condition.field].startsWith(condition.value);
+            default:
+                return true;
+        }
+    });
 }
 
 module.exports = { handleKnowledgeSpaceOperation };

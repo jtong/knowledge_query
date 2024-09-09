@@ -1,0 +1,6 @@
+desc: "Test updating a knowledge item and verifying the update"
+given:
+  dsl_file: "dsl.json"
+  repo_file: "repo.json"
+customTestFunctionPath: "./customTestFunction.js"
+customValidatorPath: "./customValidator.js"

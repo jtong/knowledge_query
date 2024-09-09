@@ -1,0 +1,8 @@
+{
+    "knowledge_space": {
+        "knowledge_items": [
+            { "id": 1, "type": "course", "content": "数学基础", "difficulty": "easy" },
+            { "id": 2, "type": "course", "content": "高等数学", "difficulty": "hard" }
+        ]
+    }
+}
