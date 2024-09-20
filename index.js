@@ -2,6 +2,21 @@ const fs = require('fs');
 const path = require('path');
 const generateContext = require('./generator/project_context_generator');
 
+function updateCondition(dsl, updates) {
+    if (!dsl.conditions) {
+        throw new Error('No conditions found in the DSL query');
+    }
+
+    const updatedConditions = dsl.conditions.map(condition => {
+        if (updates.hasOwnProperty(condition.field)) {
+            return { ...condition, value: updates[condition.field] };
+        }
+        return condition;
+    });
+
+    return { ...dsl, conditions: updatedConditions };
+}
+
 function handleKnowledgeSpaceOperation(dsl, knowledgeSpace, config = {}) {
     if (dsl.batch) {
         return handleBatchQuery(dsl, knowledgeSpace, config);
@@ -203,4 +218,4 @@ function matchesConditions(item, conditions) {
     });
 }
 
-module.exports = { handleKnowledgeSpaceOperation };
+module.exports = { handleKnowledgeSpaceOperation, updateCondition };

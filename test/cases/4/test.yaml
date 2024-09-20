@@ -1,0 +1,19 @@
+desc: "Test updateCondition function"
+given:
+  dsl_file: "dsl.json"
+customTestFunctionPath: "./customTestFunction.js"
+then:
+  ruleMatch:
+    - type: "isObject"
+      target: "updatedDSL"
+    - type: "hasKey"
+      target: "updatedDSL"
+      value: "conditions"
+    - type: "isArray"
+      target: "updatedDSL.conditions"
+    - type: "lengthEquals"
+      target: "updatedDSL.conditions"
+      value: 2
+    - type: "stringEqualsIgnoreCase"
+      target: "updatedDSL.conditions.1.value"
+      value: "hard"

@@ -1,0 +1,21 @@
+{
+    "originalDSL": {
+        "action": "GET",
+        "target": "knowledge_item",
+        "conditions": [
+            {
+                "field": "type",
+                "operator": "=",
+                "value": "course"
+            },
+            {
+                "field": "difficulty",
+                "operator": "=",
+                "value": "easy"
+            }
+        ]
+    },
+    "updates": {
+        "difficulty": "hard"
+    }
+}

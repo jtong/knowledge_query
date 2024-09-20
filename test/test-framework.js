@@ -96,12 +96,10 @@ function handleRuleMatch(result, rules) {
                 expect(actualValue, `Expected object to have key '${rule.value}'`).to.have.property(rule.value);
                 break;
             case "isArray":
-                const targetValue = rule.target ? result[rule.target] : result;
-                expect(targetValue, `Expected '${rule.target || 'result'}' to be an array`).to.be.an('array');
+                expect(actualValue, `Expected '${rule.target || 'result'}' to be an array`).to.be.an('array');
                 break;
             case "lengthEquals":
-                const arrayToCheck = rule.target ? result[rule.target] : result;
-                expect(arrayToCheck.length, `Expected length to be ${rule.value}, but got ${arrayToCheck.length}`).to.equal(rule.value);
+                expect(actualValue.length, `Expected length to be ${rule.value}, but got ${actualValue.length}`).to.equal(rule.value);
                 break;
             case "lengthNotGreaterThan":
                 expect(actualValue.length, `Expected length to be at most ${rule.value}, but got ${actualValue.length}`).to.be.at.most(rule.value);
@@ -110,8 +108,7 @@ function handleRuleMatch(result, rules) {
                 expect(actualValue.length, `Expected length to be greater than ${rule.value}, but got ${actualValue.length}`).to.be.greaterThan(rule.value);
                 break;
             case "isObject":
-                const objectToCheck = rule.target ? result[rule.target] : result;
-                expect(objectToCheck, `Expected '${rule.target || 'result'}' to be an object`).to.be.an('object');
+                expect(actualValue, `Expected '${rule.target || 'result'}' to be an object`).to.be.an('object');
                 break;
             case "stringEqualsIgnoreCase":
                 const expectedValue = rule.value;
