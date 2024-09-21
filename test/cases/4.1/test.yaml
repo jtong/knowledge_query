@@ -1,0 +1,22 @@
+desc: "Test updateCondition function with batch queries"
+given:
+  dsl_file: "dsl.json"
+customTestFunctionPath: "./customTestFunction.js"
+then:
+  ruleMatch:
+    - type: "isObject"
+      target: "updatedDSL"
+    - type: "hasKey"
+      target: "updatedDSL"
+      value: "queries"
+    - type: "isArray"
+      target: "updatedDSL.queries"
+    - type: "lengthEquals"
+      target: "updatedDSL.queries"
+      value: 2
+    - type: "stringEqualsIgnoreCase"
+      target: "updatedDSL.queries.0.conditions.0.value"
+      value: "webinar"
+    - type: "equals"
+      target: "updatedDSL.queries.1.conditions.0.value"
+      value: 2023

@@ -3,13 +3,12 @@ const path = require('path');
 const generateContext = require('./generator/project_context_generator');
 
 function updateCondition(dsl, updates) {
-    if (!dsl.conditions) {
-        throw new Error('No conditions found in the DSL query');
+    if (!dsl.conditions && !dsl.queries) {
+        throw new Error('Invalid DSL structure. Expected either "conditions" or "queries" to be present.');
     }
 
     function evaluateExpression(express, updates) {
-        // 简单的表达式求值，替换变量
-        return express.replace(/\$\{(\w+)\}/g, (match, variable) => {
+        return express.replace(/\${(\w+)}/g, (match, variable) => {
             return updates.hasOwnProperty(variable) ? updates[variable] : match;
         });
     }
@@ -27,33 +26,32 @@ function updateCondition(dsl, updates) {
         }
     }
 
-    const updatedConditions = dsl.conditions.map(condition => {
-        if (condition.express) {
-            const evaluatedValue = evaluateExpression(condition.express, updates);
-            return {
-                ...condition,
-                value: convertType(evaluatedValue, condition.value)
-            };
-        }
-        return condition;
-    });
-
-    return { ...dsl, conditions: updatedConditions };
-}
-
-function updateSingleQueryCondition(query, updates) {
-    if (!query.conditions) {
-        throw new Error('No conditions found in the DSL query');
+    function updateConditionsArray(conditions) {
+        return conditions.map(condition => {
+            if (condition.express) {
+                const evaluatedValue = evaluateExpression(condition.express, updates);
+                return {
+                    ...condition,
+                    value: convertType(evaluatedValue, condition.value)
+                };
+            }
+            return condition;
+        });
     }
 
-    const updatedConditions = query.conditions.map(condition => {
-        if (updates.hasOwnProperty(condition.field)) {
-            return { ...condition, value: updates[condition.field] };
-        }
-        return condition;
-    });
-
-    return { ...query, conditions: updatedConditions };
+    if (dsl.conditions) {
+        // Handle single query
+        return { ...dsl, conditions: updateConditionsArray(dsl.conditions) };
+    } else if (dsl.queries) {
+        // Handle batch query
+        const updatedQueries = dsl.queries.map(query => {
+            if (query.conditions) {
+                return { ...query, conditions: updateConditionsArray(query.conditions) };
+            }
+            return query;
+        });
+        return { ...dsl, queries: updatedQueries };
+    }
 }
 
 function handleKnowledgeSpaceOperation(dsl, knowledgeSpace, config = {}) {

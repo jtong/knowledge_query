@@ -1,0 +1,36 @@
+{
+    "originalDSL": {
+        "batch": true,
+        "action": "GET",
+        "queries": [
+            {
+                "target": "knowledge_item",
+                "alias": "query1",
+                "conditions": [
+                    {
+                        "field": "type",
+                        "operator": "=",
+                        "value": "course",
+                        "express": "${courseType}"
+                    }
+                ]
+            },
+            {
+                "target": "knowledge_item",
+                "alias": "query2",
+                "conditions": [
+                    {
+                        "field": "year",
+                        "operator": "=",
+                        "value": 2000,
+                        "express": "${year}"
+                    }
+                ]
+            }
+        ]
+    },
+    "updates": {
+        "courseType": "webinar",
+        "year": 2023
+    }
+}
