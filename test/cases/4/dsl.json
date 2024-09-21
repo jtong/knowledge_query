@@ -9,13 +9,28 @@
                 "value": "course"
             },
             {
-                "field": "difficulty",
+                "field": "content_path",
                 "operator": "=",
-                "value": "easy"
+                "value": "default.txt",
+                "express": "${filename}"
+            },
+            {
+                "field": "year",
+                "operator": "=",
+                "value": 2000,
+                "express": "${year}"
+            },
+            {
+                "field": "is_active",
+                "operator": "=",
+                "value": true,
+                "express": "${active}"
             }
         ]
     },
     "updates": {
-        "difficulty": "hard"
+        "filename": "sample_content.txt",
+        "year": 2023,
+        "active": false
     }
 }

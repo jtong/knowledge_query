@@ -9,7 +9,7 @@ module.exports = async function(given, testFilePath) {
     
     // 执行更新操作
     const updatedDSL = updateCondition(originalDSL, updates);
-    console.log(JSON.stringify(updatedDSL, null, 2));
+    // console.log(JSON.stringify(updatedDSL, null, 2));
     // 返回更新结果
     return {
         updatedDSL

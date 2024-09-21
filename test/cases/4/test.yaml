@@ -1,4 +1,4 @@
-desc: "Test updateCondition function"
+desc: "Test updateCondition function with express attribute and type preservation"
 given:
   dsl_file: "dsl.json"
 customTestFunctionPath: "./customTestFunction.js"
@@ -13,7 +13,16 @@ then:
       target: "updatedDSL.conditions"
     - type: "lengthEquals"
       target: "updatedDSL.conditions"
-      value: 2
+      value: 4
+    - type: "stringEqualsIgnoreCase"
+      target: "updatedDSL.conditions.0.value"
+      value: "course"
     - type: "stringEqualsIgnoreCase"
       target: "updatedDSL.conditions.1.value"
-      value: "hard"
+      value: "sample_content.txt"
+    - type: "equals"
+      target: "updatedDSL.conditions.2.value"
+      value: 2023
+    - type: "equals"
+      target: "updatedDSL.conditions.3.value"
+      value: false

@@ -7,14 +7,53 @@ function updateCondition(dsl, updates) {
         throw new Error('No conditions found in the DSL query');
     }
 
+    function evaluateExpression(express, updates) {
+        // 简单的表达式求值，替换变量
+        return express.replace(/\$\{(\w+)\}/g, (match, variable) => {
+            return updates.hasOwnProperty(variable) ? updates[variable] : match;
+        });
+    }
+
+    function convertType(value, targetType) {
+        switch (typeof targetType) {
+            case 'number':
+                return Number(value);
+            case 'boolean':
+                return value.toLowerCase() === 'true';
+            case 'string':
+                return String(value);
+            default:
+                return value;
+        }
+    }
+
     const updatedConditions = dsl.conditions.map(condition => {
+        if (condition.express) {
+            const evaluatedValue = evaluateExpression(condition.express, updates);
+            return {
+                ...condition,
+                value: convertType(evaluatedValue, condition.value)
+            };
+        }
+        return condition;
+    });
+
+    return { ...dsl, conditions: updatedConditions };
+}
+
+function updateSingleQueryCondition(query, updates) {
+    if (!query.conditions) {
+        throw new Error('No conditions found in the DSL query');
+    }
+
+    const updatedConditions = query.conditions.map(condition => {
         if (updates.hasOwnProperty(condition.field)) {
             return { ...condition, value: updates[condition.field] };
         }
         return condition;
     });
 
-    return { ...dsl, conditions: updatedConditions };
+    return { ...query, conditions: updatedConditions };
 }
 
 function handleKnowledgeSpaceOperation(dsl, knowledgeSpace, config = {}) {

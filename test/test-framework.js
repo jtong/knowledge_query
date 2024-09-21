@@ -20,21 +20,21 @@ exports.runTests = function (config) {
 
             it(testCase.desc, async function () {
                 this.timeout(10000);
-                
+
                 let customTestFunction, customValidator;
-                
+
                 // 加载自定义测试函数（如果存在）
                 if (testCase.customTestFunctionPath) {
                     const functionPath = path.resolve(path.dirname(filePath), testCase.customTestFunctionPath);
                     customTestFunction = require(functionPath);
                 }
-                
+
                 // 加载自定义验证函数（如果存在）
                 if (testCase.customValidatorPath) {
                     const validatorPath = path.resolve(path.dirname(filePath), testCase.customValidatorPath);
                     customValidator = require(validatorPath);
                 }
-                
+
                 // 执行测试函数
                 const testFunction = customTestFunction || config.testFunction;
                 const result = await testFunction(testCase.given, filePath);
@@ -88,7 +88,7 @@ function validateResult(result, testCase) {
 function handleRuleMatch(result, rules) {
     // 处理ruleMatch规则
     rules.forEach(rule => {
-        const actualValue =  rule.target && rule.target !== '' ? getNestedProperty(result, rule.target) : result;
+        const actualValue = rule.target && rule.target !== '' ? getNestedProperty(result, rule.target) : result;
 
         // 根据rule.type处理不同的验证逻辑
         switch (rule.type) {
@@ -113,6 +113,9 @@ function handleRuleMatch(result, rules) {
             case "stringEqualsIgnoreCase":
                 const expectedValue = rule.value;
                 expect(actualValue.toLowerCase(), `Expected to equal '${expectedValue}' ignoring case, but got '${actualValue}'`).to.equal(expectedValue.toLowerCase());
+                break;
+            case "equals":
+                expect(actualValue, `Expected ${rule.target || 'value'} to equal ${rule.value}, but got ${actualValue}`).to.deep.equal(rule.value);
                 break;
             // 添加更多规则类型的处理逻辑
             default:
